@@ -1,35 +1,26 @@
-# create your drupal and postgres config here, based off the last assignment
-
 version: '3'
 
 services:
   pgsql:
-    image: postgres:9.6
+    image: postgres:latest
     environment:
-      POSTGRES_PASSWORD: example
-    volumes:
-      - drupal-data:/var/lib/postgresql/data
+      POSTGRES_PASSWORD: mypassword
     restart: always
 
   web:
-    image: custom-drupal # this will build via Dockerfile
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: drupal:latest # this will use the latest version
     ports:
       - '8080:80' # expose 80 on host and sent to 80 in container
     volumes:
       - drupal-modules:/var/www/html/modules 
       - drupal-profiles:/var/www/html/profiles 
       - drupal-sites:/var/www/html/sites 
-      - drupal-themes:/var/www/html/themes
-      
+      - drupal-themes:/var/www/html/themes 
     links:
       - pgsql:postgres
     restart: always
 
 volumes:
-  drupal-data:
   drupal-modules:
   drupal-profiles:
   drupal-sites:

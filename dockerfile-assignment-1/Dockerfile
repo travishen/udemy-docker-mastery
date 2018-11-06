@@ -13,6 +13,23 @@
 # then start a new container from your Hub image, and watch how it auto downloads and runs
 # test again that it works at http://localhost
 
+FROM node:6-alpine  
+
+RUN apk update \
+    && apk add --update tini \
+    && mkdir -p /usr/src/app
+
+WORKDIR /usr/src/app
+
+COPY package.json /usr/src/app/
+
+RUN npm install && npm cache clean --force
+
+COPY . /usr/src/app/ 
+
+EXPOSE 3000
+
+CMD ["/sbin/tini", "--", "node", "./bin/www"]
 
 # Instructions from the app developer
 # - you should use the 'node' official image, with the alpine 6.x branch
